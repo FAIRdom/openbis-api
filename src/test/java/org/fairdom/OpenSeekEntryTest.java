@@ -53,8 +53,8 @@ public class OpenSeekEntryTest {
 
 	//private final String as_endpoint = "https://openbis-api.fair-dom.org/openbis/openbis";
 	//private final String dss_endpoint = "https://openbis-api.fair-dom.org/datastore_server";
-	private final String as_endpoint = "https://127.0.0.1:8443/openbis/openbis";
-	private final String dss_endpoint = "https://127.0.0.1:8444/datastore_server";
+	private final String as_endpoint = Commons.TEST_OPENBIS_URL;
+	private final String dss_endpoint = Commons.TEST_OPENBIS_DATASTORE_ENDPOINT;
 	private PrintStream oldStream;
 
 	private ByteArrayOutputStream outputStream;
@@ -62,12 +62,12 @@ public class OpenSeekEntryTest {
 	@Before
 	public void setUpSSL() throws AuthenticationException {
             //SslCertificateHelper.addTrustedUrl("https://openbis-api.fair-dom.org/openbis/openbis");   
-            SslCertificateHelper.addTrustedUrl("https://127.0.0.1:8443/openbis/openbis");            
+            SslCertificateHelper.addTrustedUrl(Commons.TEST_OPENBIS_URL);            
         }
         
         String localEndpoint() throws AuthenticationException {
-            String localAs = "https://127.0.0.1:8443/openbis/openbis";
-            Authentication au = new Authentication(localAs, "seek", "seek");
+            String localAs = Commons.TEST_OPENBIS_URL;
+            Authentication au = new Authentication(localAs, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);
 
             String token = au.sessionToken();
             String endpoint = "{\"as\":\"" + localAs + "\",\"sessionToken\":\"" + token + "\"}";            

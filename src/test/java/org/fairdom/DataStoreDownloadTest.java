@@ -39,10 +39,8 @@ public class DataStoreDownloadTest {
 		endpoint = "https://openbis-api.fair-dom.org/datastore_server";
 		sessionToken = au.sessionToken();*/
                 
-                String ass = "https://127.0.0.1:8443/openbis/openbis";
-                Authentication au = new Authentication(ass, "seek","seek");                
+                Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);                
                 
-                endpoint = "https://127.0.0.1:8444/datastore_server";
 		sessionToken = au.sessionToken();
                 localFile = testFolder.newFile();
 	}

@@ -12,14 +12,11 @@ import org.junit.Test;
 
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.DataSet;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.DataSetType;
-import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.fetchoptions.DataSetFetchOptions;
-import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.search.DataSetSearchCriteria;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.experiment.Experiment;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.experiment.ExperimentType;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.sample.Sample;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.sample.SampleType;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.space.Space;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -32,7 +29,7 @@ import org.junit.Ignore;
  * @author Stuart Owen
  */
 public class ApplicationServerQueryTest {
-
+	
 	private String endpoint;
 	private String sessionToken;
 	private ApplicationServerQuery query;
@@ -40,19 +37,19 @@ public class ApplicationServerQueryTest {
 	@Before
 	public void setUp() throws AuthenticationException {
             //SslCertificateHelper.addTrustedUrl("https://openbis-api.fair-dom.org/openbis/openbis");   
-            SslCertificateHelper.addTrustedUrl("https://127.0.0.1:8443/openbis/openbis");            
+            SslCertificateHelper.addTrustedUrl(Commons.TEST_OPENBIS_URL);            
             
             //endpoint = "https://openbis-api.fair-dom.org/openbis/openbis";
-            endpoint = "https://127.0.0.1:8443/openbis/openbis";
+            endpoint = Commons.TEST_OPENBIS_URL;
             //Authentication au = new Authentication(endpoint, "apiuser","apiuser");
-            Authentication au = new Authentication(endpoint, "seek","seek");
+            Authentication au = new Authentication(endpoint, Commons.TEST_OPENBIS_USER,Commons.TEST_OPENBIS_PASSWORD);
             sessionToken = au.sessionToken();
             query = new ApplicationServerQuery(endpoint, sessionToken);
 	}
         
         protected ApplicationServerQuery localQuery() throws AuthenticationException {
-                String localAs = "https://127.0.0.1:8443/openbis/openbis";
-                Authentication au = new Authentication(localAs, "seek", "seek");
+                String localAs = Commons.TEST_OPENBIS_URL;
+                Authentication au = new Authentication(localAs, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);
                 return new ApplicationServerQuery(localAs, au.sessionToken());
         }
 

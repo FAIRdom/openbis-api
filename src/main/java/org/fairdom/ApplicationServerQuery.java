@@ -30,7 +30,6 @@ import ch.ethz.sis.openbis.generic.asapi.v3.dto.space.fetchoptions.SpaceFetchOpt
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.space.search.SpaceSearchCriteria;
 import ch.systemsx.cisd.common.spring.HttpInvokerUtils;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.json.simple.JSONObject;
 
 /**

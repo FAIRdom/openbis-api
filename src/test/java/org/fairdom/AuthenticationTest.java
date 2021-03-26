@@ -7,37 +7,26 @@ import org.junit.Test;
 import org.springframework.remoting.RemoteAccessException;
 
 public class AuthenticationTest {
-	protected String asEndpoint;
-	protected String dssEndpoint;
-	protected String username;
-	protected String password;
-
-	@Before
-	public void setUp() {
-		asEndpoint = new String("https://openbis-api.fair-dom.org/openbis/openbis");
-		username = new String("apiuser");
-		password = new String("apiuser");
-	}
 
 	@Test
 	public void successfullyAuthenticated() throws Exception {
-		Authentication au = new Authentication(asEndpoint, username, password);
+		Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);
 		String sessionToken = au.sessionToken();
-		assertTrue(sessionToken.matches(username.concat("(.*)")));
+		assertTrue(sessionToken.matches(Commons.TEST_OPENBIS_USER.concat("(.*)")));
 	}
 
 	@Test(expected = AuthenticationException.class)
 	public void invalidAccount() throws Exception {
 		String invalidUsername = new String("test1");
 		String invalidPassword = new String("test");
-		Authentication au = new Authentication(asEndpoint, invalidUsername, invalidPassword);
+		Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, invalidUsername, invalidPassword);
 		au.sessionToken();
 	}
 
 	@Test(expected = RemoteAccessException.class)
 	public void invalidEndpoint() throws Exception {
 		String invalidEndpoint = new String("https://example.com");
-		Authentication au = new Authentication(invalidEndpoint, username, password);
+		Authentication au = new Authentication(invalidEndpoint, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);
 		au.sessionToken();
 	}
 

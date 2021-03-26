@@ -36,9 +36,8 @@ public class SemanticAnnotationsTest {
     
     @Before
     public void setUp() throws AuthenticationException, IOException {
-        endpoint = "https://127.0.0.1:8443/openbis/openbis";
-	
-        Authentication au = new Authentication(endpoint, "seek","seek");
+    
+        Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);
         sessionToken = au.sessionToken();
         
         v3 = HttpInvokerUtils.createServiceStub(IApplicationServerApi.class,

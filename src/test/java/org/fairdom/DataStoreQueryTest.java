@@ -24,9 +24,9 @@ public class DataStoreQueryTest {
 
 	@Before
 	public void setUp() throws AuthenticationException {
-		Authentication au = new Authentication("https://openbis-api.fair-dom.org/openbis/openbis", "apiuser",
-				"apiuser");
-		endpoint = "https://openbis-api.fair-dom.org/datastore_server";
+		Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, Commons.TEST_OPENBIS_USER,
+				Commons.TEST_OPENBIS_PASSWORD);
+		
 		sessionToken = au.sessionToken();
 	}
 
