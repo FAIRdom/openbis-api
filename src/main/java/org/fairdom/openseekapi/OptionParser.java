@@ -1,8 +1,10 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.general.Action;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;

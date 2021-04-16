@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.fairdom.openseekapi.datastore.DataStoreDownload;
+import org.fairdom.openseekapi.general.Authentication;
+import org.fairdom.openseekapi.general.AuthenticationException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

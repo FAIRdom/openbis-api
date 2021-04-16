@@ -1,8 +1,11 @@
-package org.fairdom;
+package org.fairdom.openseekapi.datastore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.general.QueryType;
 
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.common.search.SearchResult;
 import ch.ethz.sis.openbis.generic.dssapi.v3.dto.datasetfile.DataSetFile;

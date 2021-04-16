@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi.general;
 
 /**
  * @author Quyen Nugyen

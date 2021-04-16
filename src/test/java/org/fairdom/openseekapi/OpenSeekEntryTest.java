@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.junit.Assert.*;
@@ -10,6 +10,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.fairdom.openseekapi.OpenSeekEntry;
+import org.fairdom.openseekapi.OptionParser;
+import org.fairdom.openseekapi.facility.SslCertificateHelper;
+import org.fairdom.openseekapi.general.Authentication;
+import org.fairdom.openseekapi.general.AuthenticationException;
+import org.fairdom.openseekapi.general.QueryType;
 import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;

@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.DataSet;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.experiment.Experiment;
@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.fairdom.openseekapi.datastore.DataStoreDownload;
+import org.fairdom.openseekapi.datastore.DataStoreQuery;
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.facility.JSONCreator;
+import org.fairdom.openseekapi.general.Authentication;
+import org.fairdom.openseekapi.general.AuthenticationException;
+import org.fairdom.openseekapi.general.QueryType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 

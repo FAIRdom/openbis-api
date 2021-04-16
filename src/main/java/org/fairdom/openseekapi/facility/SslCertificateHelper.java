@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi.facility;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +30,11 @@ import ch.ethz.sis.openbis.generic.asapi.v3.dto.space.fetchoptions.SpaceFetchOpt
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.space.search.SpaceSearchCriteria;
 import ch.systemsx.cisd.common.spring.HttpInvokerUtils;
 import java.util.Map;
+
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.facility.SslCertificateHelper;
+import org.fairdom.openseekapi.general.AuthenticationException;
+import org.fairdom.openseekapi.general.QueryType;
 import org.json.simple.JSONObject;
 
 /**

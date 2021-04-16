@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi.datastore;
 
 import java.io.File;
 import java.io.FileOutputStream;

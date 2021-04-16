@@ -1,10 +1,17 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fairdom.openseekapi.ApplicationServerQuery;
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.facility.JSONCreator;
+import org.fairdom.openseekapi.facility.SslCertificateHelper;
+import org.fairdom.openseekapi.general.Authentication;
+import org.fairdom.openseekapi.general.AuthenticationException;
+import org.fairdom.openseekapi.general.QueryType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.Before;

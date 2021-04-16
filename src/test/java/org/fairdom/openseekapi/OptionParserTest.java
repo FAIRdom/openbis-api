@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 /**
  * @author Quyen Nugyen
@@ -6,6 +6,9 @@ package org.fairdom;
  */
 import static org.junit.Assert.assertEquals;
 
+import org.fairdom.openseekapi.OptionParser;
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.general.Action;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;

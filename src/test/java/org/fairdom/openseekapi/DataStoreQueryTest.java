@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.fairdom.openseekapi.datastore.DataStoreQuery;
+import org.fairdom.openseekapi.facility.InvalidOptionException;
+import org.fairdom.openseekapi.facility.JSONCreator;
+import org.fairdom.openseekapi.general.Authentication;
+import org.fairdom.openseekapi.general.AuthenticationException;
+import org.fairdom.openseekapi.general.QueryType;
 import org.junit.Before;
 import org.junit.Test;
 

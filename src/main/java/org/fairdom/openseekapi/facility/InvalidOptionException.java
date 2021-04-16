@@ -1,4 +1,4 @@
-package org.fairdom;
+package org.fairdom.openseekapi.facility;
 
 /**
  * Created by quyennguyen on 19/02/15.

@@ -1,4 +1,6 @@
-package org.fairdom;
+package org.fairdom.openseekapi.datastore;
+
+import org.fairdom.openseekapi.facility.SslCertificateHelper;
 
 import ch.ethz.sis.openbis.generic.dssapi.v3.IDataStoreServerApi;
 import ch.systemsx.cisd.common.spring.HttpInvokerUtils;
