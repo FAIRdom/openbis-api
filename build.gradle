@@ -5,8 +5,8 @@ apply plugin: 'com.github.kt3k.coveralls' //coveralls plugin
 sourceCompatibility=1.8
 targetCompatibility=1.8
 
-def mainClass='org.fairdom.OpenSeekEntry'
-def jarVersion='0.17'
+def mainClass='org.fairdom.openseekapi.OpenSeekEntry'
+def jarVersion='0.18'
 
 
 repositories {
