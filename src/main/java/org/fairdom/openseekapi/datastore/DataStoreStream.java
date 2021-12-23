@@ -1,5 +1,6 @@
 package org.fairdom.openseekapi.datastore;
 
+import org.fairdom.openseekapi.OpenSeekEntry;
 import org.fairdom.openseekapi.facility.SslCertificateHelper;
 
 import ch.ethz.sis.openbis.generic.dssapi.v3.IDataStoreServerApi;
@@ -15,7 +16,10 @@ public class DataStoreStream {
 
 	public static IDataStoreServerApi dss(String endpoint) {
 		//SslCertificateHelper.trustAnyCertificate(endpoint);
-                SslCertificateHelper.addTrustedUrl(endpoint);
+		if (!OpenSeekEntry.is_test)
+		{
+			SslCertificateHelper.addTrustedUrl(endpoint);
+		}
 		IDataStoreServerApi dss = HttpInvokerUtils.createStreamSupportingServiceStub(IDataStoreServerApi.class,
 				endpoint + IDataStoreServerApi.SERVICE_URL, 500000);
 		return dss;

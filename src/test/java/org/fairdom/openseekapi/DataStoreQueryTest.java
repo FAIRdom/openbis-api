@@ -30,6 +30,8 @@ public class DataStoreQueryTest {
 
 	@Before
 	public void setUp() throws AuthenticationException {
+		OpenSeekEntry.is_test = true;
+		
 		Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, Commons.TEST_OPENBIS_USER,
 				Commons.TEST_OPENBIS_PASSWORD);
 		

@@ -43,6 +43,9 @@ public class ApplicationServerQueryTest {
 
 	@Before
 	public void setUp() throws AuthenticationException {
+		
+		OpenSeekEntry.is_test = true;
+		
             //SslCertificateHelper.addTrustedUrl("https://openbis-api.fair-dom.org/openbis/openbis");   
             SslCertificateHelper.addTrustedUrl(Commons.TEST_OPENBIS_URL);            
             

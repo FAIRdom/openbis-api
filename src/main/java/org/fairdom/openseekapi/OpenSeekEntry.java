@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.IllegalFormatConversionException;
 import java.util.List;
 import java.util.Map;
 
@@ -31,19 +32,20 @@ import org.json.simple.parser.ParseException;
  */
 public class OpenSeekEntry {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidOptionException {
 		new OpenSeekEntry(args).execute();
 	}
 
 	private String[] args;
-        final ObjectMapper mapper;
-
+	final ObjectMapper mapper;
+	public static boolean is_test = false;
+	
 	public OpenSeekEntry(String args[]) {
 		this.args = args;
-                this.mapper = new ObjectMapper();
+		this.mapper = new ObjectMapper();
 	}
 
-	public void execute() {
+	public void execute() throws InvalidOptionException {
 		OptionParser options = null;
 		try {
 			options = new OptionParser(args);
@@ -55,6 +57,9 @@ public class OpenSeekEntry {
 			System.out.println(pe);
 			exit(-1);
 		}
+		// If in test, we allow http
+		checkIfInTest(options);
+			
 		String json = "";
 		try {
 			switch (options.getAction()) {
@@ -75,7 +80,7 @@ public class OpenSeekEntry {
 				throw new InvalidOptionException("Unable to determine action");
 			}
 		} catch (Exception ex) {
-			System.err.println(ex.getMessage());
+			System.out.println("[MESSAGE]"+ex.getMessage()+"[/MESSAGE]");
 			ex.printStackTrace();
 			exit(-1);
 		}
@@ -83,83 +88,86 @@ public class OpenSeekEntry {
 		exit(0);
 	}
 
-	protected String doApplicationServerQuery(OptionParser options) throws InvalidOptionException, AuthenticationException, JsonProcessingException {
+	protected String doApplicationServerQuery(OptionParser options)
+			throws InvalidOptionException, AuthenticationException, JsonProcessingException {
 		JSONObject endpoints = options.getEndpoints();
 		JSONObject query = options.getQuery();
 
 		ApplicationServerQuery asQuery = new ApplicationServerQuery(endpoints.get("as").toString(),
 				endpoints.get("sessionToken").toString());
 		List<? extends Object> result;
-                
-                QueryType queryType = QueryType.valueOf(query.get("queryType").toString());
-                
-                switch(queryType) {
-                    case ALL:
-                                    result = asQuery.allEntities(query.get("entityType").toString());
-                                    
-                                    if (query.get("entityType").equals("SampleType")) {
-                                        return mapToJsonString("sampletypes",result);
-                                    } 
-                                    if (query.get("entityType").equals("DataSetType")) {
-                                        return mapToJsonString("datasettypes",result);
-                                    } 
-                                    if (query.get("entityType").equals("ExperimentType")) {
-                                        return mapToJsonString("experimenttypes",result);
-                                    }                                    
-                                    
-                                    break;
-                    case PROPERTY: result = asQuery.query(query.get("entityType").toString(), QueryType.PROPERTY,
-					query.get("property").toString(), query.get("propertyValue").toString());
-                                        break;
-                    case ATTRIBUTE: 
-                                    List<String> attributeValues = options.constructAttributeValues(query.get("attributeValue").toString());
-                                    result = asQuery.query(query.get("entityType").toString(), QueryType.ATTRIBUTE,
-					query.get("attribute").toString(), attributeValues);
-                                    
-                                    if (query.get("entityType").equals("SampleType")) {
-                                        return mapToJsonString("sampletypes",result);
-                                    }
-                                    if (query.get("entityType").equals("DataSetType")) {
-                                        return mapToJsonString("datasettypes",result);
-                                    }
-                                    if (query.get("entityType").equals("ExperimentType")) {
-                                        return mapToJsonString("experimenttypes",result);
-                                    }
-                                    
-                                    break;
-                    case TYPE:
-                                    if (query.get("entityType").equals("Sample")) {
-                                        List<Sample> samples = asQuery.samplesByType(query);
-                                        return new JSONCreator(samples).getJSON();
-                                    } else if (query.get("entityType").equals("DataSet")) {
-                                        List<DataSet> sets = asQuery.dataSetsByType(query);
-                                        return new JSONCreator(sets).getJSON();
-                                    } else if (query.get("entityType").equals("Experiment")) {
-                                        List<Experiment> exps = asQuery.experimentsByType(query);
-                                        return new JSONCreator(exps).getJSON();
-                                    } else {
-                                        throw new InvalidOptionException("Type query for unsupported type: "+query.get("entityType"));
-                                    }
-                        
-                    case SEMANTIC:
-                                    if (query.get("entityType").equals("SampleType")) {
-                                        List<SampleType> types = asQuery.sampleTypesBySemantic(query);
-                                        return mapToJsonString("sampletypes",types);
-                                    } else {
-                                        throw new InvalidOptionException("Semantic query for unsupported type: "+query.get("entityType"));
-                                    }
-                    default: throw new InvalidOptionException("Unrecognized query type: "+queryType);
-                        
-                }
-                /*
-		if (query.get("queryType").toString().equals(QueryType.PROPERTY.toString())) {
+
+		QueryType queryType = QueryType.valueOf(query.get("queryType").toString());
+
+		switch (queryType) {
+		case ALL:
+			result = asQuery.allEntities(query.get("entityType").toString());
+
+			if (query.get("entityType").equals("SampleType")) {
+				return mapToJsonString("sampletypes", result);
+			}
+			if (query.get("entityType").equals("DataSetType")) {
+				return mapToJsonString("datasettypes", result);
+			}
+			if (query.get("entityType").equals("ExperimentType")) {
+				return mapToJsonString("experimenttypes", result);
+			}
+
+			break;
+		case PROPERTY:
 			result = asQuery.query(query.get("entityType").toString(), QueryType.PROPERTY,
 					query.get("property").toString(), query.get("propertyValue").toString());
-		} else {
+			break;
+		case ATTRIBUTE:
 			List<String> attributeValues = options.constructAttributeValues(query.get("attributeValue").toString());
 			result = asQuery.query(query.get("entityType").toString(), QueryType.ATTRIBUTE,
 					query.get("attribute").toString(), attributeValues);
-		}*/
+
+			if (query.get("entityType").equals("SampleType")) {
+				return mapToJsonString("sampletypes", result);
+			}
+			if (query.get("entityType").equals("DataSetType")) {
+				return mapToJsonString("datasettypes", result);
+			}
+			if (query.get("entityType").equals("ExperimentType")) {
+				return mapToJsonString("experimenttypes", result);
+			}
+
+			break;
+		case TYPE:
+			if (query.get("entityType").equals("Sample")) {
+				List<Sample> samples = asQuery.samplesByType(query);
+				return new JSONCreator(samples).getJSON();
+			} else if (query.get("entityType").equals("DataSet")) {
+				List<DataSet> sets = asQuery.dataSetsByType(query);
+				return new JSONCreator(sets).getJSON();
+			} else if (query.get("entityType").equals("Experiment")) {
+				List<Experiment> exps = asQuery.experimentsByType(query);
+				return new JSONCreator(exps).getJSON();
+			} else {
+				throw new InvalidOptionException("Type query for unsupported type: " + query.get("entityType"));
+			}
+
+		case SEMANTIC:
+			if (query.get("entityType").equals("SampleType")) {
+				List<SampleType> types = asQuery.sampleTypesBySemantic(query);
+				return mapToJsonString("sampletypes", types);
+			} else {
+				throw new InvalidOptionException("Semantic query for unsupported type: " + query.get("entityType"));
+			}
+		default:
+			throw new InvalidOptionException("Unrecognized query type: " + queryType);
+
+		}
+		/*
+		 * if (query.get("queryType").toString().equals(QueryType.PROPERTY.toString()))
+		 * { result = asQuery.query(query.get("entityType").toString(),
+		 * QueryType.PROPERTY, query.get("property").toString(),
+		 * query.get("propertyValue").toString()); } else { List<String> attributeValues
+		 * = options.constructAttributeValues(query.get("attributeValue").toString());
+		 * result = asQuery.query(query.get("entityType").toString(),
+		 * QueryType.ATTRIBUTE, query.get("attribute").toString(), attributeValues); }
+		 */
 		return new JSONCreator(result).getJSON();
 	}
 
@@ -212,10 +220,28 @@ public class OpenSeekEntry {
 
 		JSONObject account = options.getAccount();
 		JSONObject endpoints = options.getEndpoints();
+
 		Authentication au = new Authentication(endpoints.get("as").toString(), account.get("username").toString(),
 				account.get("password").toString());
 		String sessionToken = au.sessionToken();
 		return ("{\"token\":" + "\"" + sessionToken + "\"" + "}");
+	}
+
+	private boolean checkIfInTest(OptionParser options) throws InvalidOptionException {
+		JSONObject endpoints = options.getEndpoints();
+		if (!endpoints.containsKey("is_test"))
+			return false;
+		String is_test_txt = endpoints.get("is_test").toString();
+
+		try
+		{
+			is_test = Boolean.parseBoolean(is_test_txt);
+		}
+		catch (IllegalFormatConversionException e)
+		{
+			throw new InvalidOptionException("Is_test is not a proper boolean, please use only true and false (lowercase)" );
+		}
+		return is_test;
 	}
 
 	//
@@ -255,15 +281,15 @@ public class OpenSeekEntry {
 		System.exit(code);
 	}
 
-    protected String mapToJsonString(String listName, List<?> objects) throws JsonProcessingException {
-        
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"); 
-        //necessary to make writer as df is not thread safe so cannot be set globabaly
-        
-        ObjectWriter writer = mapper.writer(df);
-        Map<String,List<?>> map = new HashMap<>();
-        map.put(listName,objects);
-        return writer.writeValueAsString(map);
-    }
+	protected String mapToJsonString(String listName, List<?> objects) throws JsonProcessingException {
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		// necessary to make writer as df is not thread safe so cannot be set globabaly
+
+		ObjectWriter writer = mapper.writer(df);
+		Map<String, List<?>> map = new HashMap<>();
+		map.put(listName, objects);
+		return writer.writeValueAsString(map);
+	}
 
 }
