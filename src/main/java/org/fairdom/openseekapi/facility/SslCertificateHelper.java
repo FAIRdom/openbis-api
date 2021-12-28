@@ -135,7 +135,7 @@ public class SslCertificateHelper
     {
     	if (!OpenSeekEntry.is_test)
     	{
-    		if (!url.startsWith("https://")) throw new IllegalArgumentException("URL must starts with https:// not: "+url);;
+    		if (!url.startsWith("https://")) throw new IllegalArgumentException("URL must starts with https:// ( URL provided: "+url+")");
 
     		if (trusted.containsKey(url) && !renew) return;
 
