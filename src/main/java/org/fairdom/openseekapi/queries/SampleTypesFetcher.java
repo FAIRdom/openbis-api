@@ -27,18 +27,6 @@ public class SampleTypesFetcher{
 		SampleTypesFetcher.sessionToken = sessionToken;
 	}
 	
-	private DataSetFetchOptions dataSetFetchOptions() {
-		DataSetFetchOptions options = new DataSetFetchOptions();
-		options.withProperties();
-		options.withSample();
-		options.withExperiment();
-		options.withModifier();
-		options.withRegistrator();
-		options.withTags();
-		options.withType();
-		return options;
-	}
-	
 	public List<SampleType> all() {
 
 		SampleTypeFetchOptions fetchOptions = new SampleTypeFetchOptions();

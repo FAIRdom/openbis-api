@@ -25,19 +25,6 @@ public class ExperimentTypesFetcher{
 		ExperimentTypesFetcher.as = as;
 		ExperimentTypesFetcher.sessionToken = sessionToken;
 	}
-	
-	private DataSetFetchOptions dataSetFetchOptions() {
-		DataSetFetchOptions options = new DataSetFetchOptions();
-		options.withProperties();
-		options.withSample();
-		options.withExperiment();
-		options.withModifier();
-		options.withRegistrator();
-		options.withTags();
-		options.withType();
-		return options;
-	}
-	
 
 	public List<ExperimentType> all() {
 
