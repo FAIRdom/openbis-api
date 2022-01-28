@@ -194,12 +194,12 @@ public class ApplicationServerQueryTest {
 	public void getExperimentsByPermID() throws Exception {
 		List<String> permids = new ArrayList<>();
 		permids.add("20151216143716562-2");
-		List<Experiment> experiments = query.experimentsByAttribute("permId", permids);
+		List<Experiment> experiments = query.getExperiments().byAttribute("permId", permids);
 		assertEquals(1, experiments.size());
 		String json = new JSONCreator(experiments).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
 
-		experiments = query.experimentsByAttribute("permId", "20151216143716562-2");
+		experiments = query.getExperiments().byAttribute("permId", "20151216143716562-2");
 		assertEquals(1, experiments.size());
 		json = new JSONCreator(experiments).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
@@ -213,7 +213,7 @@ public class ApplicationServerQueryTest {
 		//permids.add("20151216143716562-2");
 		permids.add("20180418141729157-47");
 		permids.add("20180424181519696-54");
-		List<Experiment> experiments = query.experimentsByAttribute("permId", permids);
+		List<Experiment> experiments = query.getExperiments().byAttribute("permId", permids);
 		assertEquals(2, experiments.size());
 		String json = new JSONCreator(experiments).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
@@ -223,7 +223,7 @@ public class ApplicationServerQueryTest {
         //@Ignore
 	public void getAllExperiments() throws Exception {
 
-		List<Experiment> experiments = query.experimentsByAttribute("permId", "");
+		List<Experiment> experiments = query.getExperiments().byAttribute("permId", "");
 		assertTrue(experiments.size() > 0);
 		String json = new JSONCreator(experiments).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
@@ -231,7 +231,7 @@ public class ApplicationServerQueryTest {
         
 	@Test
 	public void allExperimentsGetsAll() throws Exception {
-            List<Experiment> experiments = query.allExperiments();
+            List<Experiment> experiments = query.getExperiments().all();
             assertEquals(24,experiments.size());
 	}  
         
@@ -249,7 +249,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<Experiment> res = query.experimentsByType(crit);
+            List<Experiment> res = query.getExperiments().byType(crit);
             assertNotNull(res);
             assertEquals(4, res.size());
             
@@ -260,7 +260,7 @@ public class ApplicationServerQueryTest {
             
             qMap.put("typeCodes","TZ_ASSAY_NOT_DEFINED");           
             crit = new JSONObject(qMap);
-            res = query.experimentsByType(crit);
+            res = query.getExperiments().byType(crit);
             
             assertTrue(res.isEmpty());
         }
@@ -269,7 +269,7 @@ public class ApplicationServerQueryTest {
         @Test
         public void allExprimentTypes() throws AuthenticationException {
                         
-            List<ExperimentType> res = query.allExperimentTypes();
+            List<ExperimentType> res = query.getExperimentTypes().all();
             assertNotNull(res);
             assertFalse(res.isEmpty());
             assertEquals(6,res.size());
@@ -279,7 +279,7 @@ public class ApplicationServerQueryTest {
 	@Test
 	public void experimentTypesByCode() throws Exception {
             query = localQuery();
-            List<ExperimentType> res = query.experimentTypesByCodes(Arrays.asList("DEFAULT_EXPERIMENT"));
+            List<ExperimentType> res = query.getExperimentTypes().byCodes(Arrays.asList("DEFAULT_EXPERIMENT"));
             assertEquals(1, res.size());
             assertEquals("DEFAULT_EXPERIMENT", res.get(0).getCode());
 	}   
@@ -287,7 +287,7 @@ public class ApplicationServerQueryTest {
 	@Test
 	public void eperimentTypesByCodes() throws Exception {
             query = localQuery();
-            List<ExperimentType> res = query.experimentTypesByCodes(Arrays.asList("DEFAULT_EXPERIMENT","UNKNOWN"));
+            List<ExperimentType> res = query.getExperimentTypes().byCodes(Arrays.asList("DEFAULT_EXPERIMENT","UNKNOWN"));
             assertEquals(2, res.size());
             assertEquals("DEFAULT_EXPERIMENT", res.get(0).getCode());
             assertEquals("UNKNOWN", res.get(1).getCode());
@@ -295,7 +295,7 @@ public class ApplicationServerQueryTest {
 
 	@Test
 	public void getAllSamples() throws Exception {
-		List<Sample> samples = query.samplesByAttribute("permId", "");
+		List<Sample> samples = query.getSamples().byAttribute("permId", "");
 		assertTrue(samples.size() > 0);
 		String json = new JSONCreator(samples).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
@@ -303,13 +303,13 @@ public class ApplicationServerQueryTest {
         
         @Test
 	public void allSamplesGivesAll() throws Exception {
-		List<Sample> samples = query.allSamples();
+		List<Sample> samples = query.getSamples().all();
                 assertEquals(16,samples.size());
 	}        
 
 	@Test
 	public void getAllDatasets() throws Exception {
-		List<DataSet> data = query.dataSetsByAttribute("permId", "");
+		List<DataSet> data = query.getDataSets().byAttribute("permId", "");
 		assertTrue(data.size() > 0);
 		String json = new JSONCreator(data).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
@@ -317,7 +317,7 @@ public class ApplicationServerQueryTest {
         
         @Test
         public void allDatasetsGivesAll() throws Exception {
-            List<DataSet> data = query.allDatasets();
+            List<DataSet> data = query.getDataSets().all();
             assertEquals(6,data.size());
         }
         
@@ -327,7 +327,7 @@ public class ApplicationServerQueryTest {
         //@Ignore
 	public void getDatasetByAttribute() throws Exception {
 		//List<DataSet> data = query.dataSetsByAttribute("permId", "20151217153943290-5");
-		List<DataSet> data = query.dataSetsByAttribute("permId", "20180424181745930-58");
+		List<DataSet> data = query.getDataSets().byAttribute("permId", "20180424181745930-58");
                 
 		String json = new JSONCreator(data).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
@@ -342,7 +342,7 @@ public class ApplicationServerQueryTest {
 		//values.add("20160210130359377-22");
 		values.add("20180418142059396-52");
 		values.add("20180424181745930-58");
-		List<DataSet> data = query.dataSetsByAttribute("permId", values);
+		List<DataSet> data = query.getDataSets().byAttribute("permId", values);
 		String json = new JSONCreator(data).getJSON();
 		assertTrue(JSONHelper.isValidJSON(json));
 		assertEquals(2, data.size());
@@ -353,7 +353,7 @@ public class ApplicationServerQueryTest {
             
             //String setId = "20170907185702684-36";
             String setId = "20180424182903704-59";
-            List<DataSet> sets = query.dataSetsByAttribute("permId", setId);
+            List<DataSet> sets = query.getDataSets().byAttribute("permId", setId);
             assertEquals(1,sets.size());
             
             DataSet set = sets.get(0);
@@ -377,7 +377,7 @@ public class ApplicationServerQueryTest {
         public void getsSamplesWithRichMetadata() throws Exception {
             
             String perId = "20180424183252267-60";
-            List<Sample> res = query.samplesByAttribute("permId", perId);
+            List<Sample> res = query.getSamples().byAttribute("permId", perId);
             assertEquals(1,res.size());
             
             Sample sam = res.get(0);
@@ -409,7 +409,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<Sample> res = query.samplesByType(crit);
+            List<Sample> res = query.getSamples().byType(crit);
             assertNotNull(res);
             assertEquals(8, res.size());
             
@@ -419,7 +419,7 @@ public class ApplicationServerQueryTest {
             
             qMap.put("typeCode","TZ_ASSAY_NOT_DEFINED");           
             crit = new JSONObject(qMap);
-            res = query.samplesByType(crit);
+            res = query.getSamples().byType(crit);
             
             assertTrue(res.isEmpty());
         }
@@ -438,7 +438,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<Sample> res = query.samplesByType(crit);
+            List<Sample> res = query.getSamples().byType(crit);
             assertNotNull(res);
             assertEquals(8, res.size());
             
@@ -449,7 +449,7 @@ public class ApplicationServerQueryTest {
             
             qMap.put("typeCodes","TZ_ASSAY_NOT_DEFINED");           
             crit = new JSONObject(qMap);
-            res = query.samplesByType(crit);
+            res = query.getSamples().byType(crit);
             
             assertTrue(res.isEmpty());
         }
@@ -459,7 +459,7 @@ public class ApplicationServerQueryTest {
         @Test
         public void allSampleTypes() throws AuthenticationException {
                         
-            List<SampleType> res = query.allSampleTypes();
+            List<SampleType> res = query.getSampleTypes().all();
             assertNotNull(res);
             assertFalse(res.isEmpty());
             assertEquals(25,res.size());
@@ -469,7 +469,7 @@ public class ApplicationServerQueryTest {
 	@Test
 	public void sampleTypesByCode() throws Exception {
             String typeN = "EXPERIMENTAL_STEP";
-            List<SampleType> res = query.sampleTypesByCode(typeN);
+            List<SampleType> res = query.getSampleTypes().byCode(typeN);
             assertEquals(1, res.size());
             assertEquals(typeN, res.get(0).getCode());
 	}   
@@ -477,7 +477,7 @@ public class ApplicationServerQueryTest {
 	@Test
 	public void sampleTypesByJoinedCodes() throws Exception {
             query = localQuery();
-            List<SampleType> res = query.sampleTypesByCode("EXPERIMENTAL_STEP,UNKNOWN");
+            List<SampleType> res = query.getSampleTypes().byCode("EXPERIMENTAL_STEP,UNKNOWN");
             assertEquals(2, res.size());
             assertEquals("EXPERIMENTAL_STEP", res.get(0).getCode());
             assertEquals("UNKNOWN", res.get(1).getCode());
@@ -486,7 +486,7 @@ public class ApplicationServerQueryTest {
 	@Test
 	public void sampleTypesByCodes() throws Exception {
             query = localQuery();
-            List<SampleType> res = query.sampleTypesByCodes(Arrays.asList("EXPERIMENTAL_STEP","UNKNOWN"));
+            List<SampleType> res = query.getSampleTypes().byCodes(Arrays.asList("EXPERIMENTAL_STEP","UNKNOWN"));
             assertEquals(2, res.size());
             assertEquals("EXPERIMENTAL_STEP", res.get(0).getCode());
             assertEquals("UNKNOWN", res.get(1).getCode());
@@ -512,7 +512,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<SampleType> res = query.sampleTypesBySemantic(crit);
+            List<SampleType> res = query.getSampleTypes().bySemantic(crit);
             assertNotNull(res);
             assertFalse(res.isEmpty());
             assertEquals("TZ_ASSAY",res.get(0).getCode());
@@ -525,7 +525,7 @@ public class ApplicationServerQueryTest {
                 wMap.put(field,"1");
                 
                 crit = new JSONObject(wMap);
-                res = query.sampleTypesBySemantic(crit);
+                res = query.getSampleTypes().bySemantic(crit);
                 assertNotNull(res);
                 assertTrue(res.isEmpty());                
             }
@@ -550,7 +550,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<SampleType> res = query.sampleTypesBySemantic(crit);
+            List<SampleType> res = query.getSampleTypes().bySemantic(crit);
             assertNotNull(res);
             assertFalse(res.isEmpty());
             assertEquals("TZ_ASSAY",res.get(0).getCode());
@@ -563,7 +563,7 @@ public class ApplicationServerQueryTest {
                 wMap.put(field,null);
                 
                 crit = new JSONObject(wMap);
-                res = query.sampleTypesBySemantic(crit);
+                res = query.getSampleTypes().bySemantic(crit);
                 assertNotNull(res);
                 assertFalse(res.isEmpty());
                 assertEquals("TZ_ASSAY",res.get(0).getCode());              
@@ -573,7 +573,7 @@ public class ApplicationServerQueryTest {
 	@Test
 	public void dataSetTypesByCode() throws Exception {
             String typeN = "RAW_DATA";
-            List<DataSetType> res = query.dataSetTypesByCode(typeN);
+            List<DataSetType> res = query.getDataSetTypes().byCode(typeN);
             assertEquals(1, res.size());
             assertEquals(typeN, res.get(0).getCode());
 	}    
@@ -581,7 +581,7 @@ public class ApplicationServerQueryTest {
         @Test
         public void allDataSetTypesGivesAll() throws AuthenticationException {
                         
-            List<DataSetType> res = query.allDataSetTypes();
+            List<DataSetType> res = query.getDataSetTypes().all();
             assertNotNull(res);
             assertFalse(res.isEmpty());
             //assertEquals(30,res.size());
@@ -602,7 +602,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<DataSet> res = query.dataSetsByType(crit);
+            List<DataSet> res = query.getDataSets().byType(crit);
             assertNotNull(res);
             //assertEquals(4, res.size());
             assertEquals(4, res.size());
@@ -613,7 +613,7 @@ public class ApplicationServerQueryTest {
             
             qMap.put("typeCode","TZ_ASSAY_NOT_DEFINED");           
             crit = new JSONObject(qMap);
-            res = query.dataSetsByType(crit);
+            res = query.getDataSets().byType(crit);
             
             assertTrue(res.isEmpty());
         }
@@ -632,7 +632,7 @@ public class ApplicationServerQueryTest {
             JSONObject crit = new JSONObject(qMap);
             
             
-            List<DataSet> res = query.dataSetsByType(crit);
+            List<DataSet> res = query.getDataSets().byType(crit);
             assertNotNull(res);
             assertEquals(4, res.size());
             
@@ -643,7 +643,7 @@ public class ApplicationServerQueryTest {
             
             qMap.put("typeCodes","TZ_ASSAY_NOT_DEFINED");           
             crit = new JSONObject(qMap);
-            res = query.dataSetsByType(crit);
+            res = query.getDataSets().byType(crit);
             
             assertTrue(res.isEmpty());
         }
@@ -655,7 +655,7 @@ public class ApplicationServerQueryTest {
 	public void getExperimentWithSeekStudyID() throws Exception {
 		String property = "SEEK_STUDY_ID";
 		String propertyValue = "Study_1";
-		List<Experiment> experiments = query.experimentsByProperty(property, propertyValue);
+		List<Experiment> experiments = query.getExperiments().byProperty(property, propertyValue);
 		assertEquals(1, experiments.size());
 		Experiment experiment = experiments.get(0);
 		assertEquals(propertyValue, experiment.getProperties().get(property));
@@ -666,7 +666,7 @@ public class ApplicationServerQueryTest {
 	public void getExperimentWithSeekStudyIDNoResult() throws Exception {
 		String property = "SEEK_STUDY_ID";
 		String propertyValue = "SomeID";
-		List<Experiment> experiments = query.experimentsByProperty(property, propertyValue);
+		List<Experiment> experiments = query.getExperiments().byProperty(property, propertyValue);
 		assertEquals(0, experiments.size());
 	}
 
@@ -675,7 +675,7 @@ public class ApplicationServerQueryTest {
 	public void getSampleWithSeekAssayID() throws Exception {
 		String property = "SEEK_ASSAY_ID";
 		String propertyValue = "Assay_1";
-		List<Sample> samples = query.samplesByProperty(property, propertyValue);
+		List<Sample> samples = query.getSamples().byProperty(property, propertyValue);
 		assertEquals(1, samples.size());
 		Sample sample = samples.get(0);
 
@@ -690,7 +690,7 @@ public class ApplicationServerQueryTest {
 	public void getSampleWithSeekAssayIDNoResult() throws Exception {
 		String property = "SEEK_ASSAY_ID";
 		String propertyValue = "SomeID";
-		List<Sample> samples = query.samplesByProperty(property, propertyValue);
+		List<Sample> samples = query.getSamples().byProperty(property, propertyValue);
 		assertEquals(0, samples.size());
 	}
 
@@ -699,7 +699,7 @@ public class ApplicationServerQueryTest {
 	public void getDataSetWithSeekDataFileID() throws Exception {
 		String property = "SEEK_DATAFILE_ID";
 		String propertyValue = "DataFile_1";
-		List<DataSet> dataSets = query.dataSetsByProperty(property, propertyValue);
+		List<DataSet> dataSets = query.getDataSets().byProperty(property, propertyValue);
 		assertEquals(1, dataSets.size());
 		DataSet dataSet = dataSets.get(0);
 
@@ -711,7 +711,7 @@ public class ApplicationServerQueryTest {
 	public void getDatasetWithSeekDataFileIDNoResult() throws Exception {
 		String property = "SEEK_DATAFILE_ID";
 		String propertyValue = "SomeID";
-		List<DataSet> dataSets = query.dataSetsByProperty(property, propertyValue);
+		List<DataSet> dataSets = query.getDataSets().byProperty(property, propertyValue);
 		assertEquals(0, dataSets.size());
 	}
 
@@ -739,28 +739,28 @@ public class ApplicationServerQueryTest {
 		// project
 		//String searchTerm = "API-PROJECT";
                 String searchTerm = "SEEK_INT";
-		List<Experiment> experiments = query.experimentsByAnyField(searchTerm);
+		List<Experiment> experiments = query.getExperiments().byAnyField(searchTerm);
 		assertTrue(experiments.size() > 0);
 
 		// code
 		searchTerm = "E1";
-		experiments = query.experimentsByAnyField(searchTerm);
+		experiments = query.getExperiments().byAnyField(searchTerm);
 		assertTrue(experiments.size() > 0);
 
 		// permID
 		//searchTerm = "20151216143716562-2";
                 searchTerm = "	20180418145822544-47";
-		experiments = query.experimentsByAnyField(searchTerm);
+		experiments = query.getExperiments().byAnyField(searchTerm);
 		assertTrue(experiments.size() > 0);
 
 		// type
 		searchTerm = "DEFAULT_EXPERIMENT";
-		experiments = query.experimentsByAnyField(searchTerm);
+		experiments = query.getExperiments().byAnyField(searchTerm);
 		assertTrue(experiments.size() > 0);
 
 		// property
 		searchTerm = "Low light diurnal";
-		experiments = query.experimentsByAnyField(searchTerm);
+		experiments = query.getExperiments().byAnyField(searchTerm);
 		assertTrue(experiments.size() > 0);
 
 		/*
@@ -790,18 +790,18 @@ public class ApplicationServerQueryTest {
 	public void samplesByAnyField() throws Exception {
 		// code
 		String searchTerm = "EXP6";
-		List<Sample> samples = query.samplesByAnyField(searchTerm);
+		List<Sample> samples = query.getSamples().byAnyField(searchTerm);
 		assertTrue(samples.size() > 0);
 
 		// permID
 		//searchTerm = "20151216143743603-3";
 		searchTerm = "20180424183252267-60";                
-		samples = query.samplesByAnyField(searchTerm);
+		samples = query.getSamples().byAnyField(searchTerm);
 		assertTrue(samples.size() > 0);
 
 		// type
 		searchTerm = "EXPERIMENTAL_STEP";
-		samples = query.samplesByAnyField(searchTerm);
+		samples = query.getSamples().byAnyField(searchTerm);
 		assertTrue(samples.size() > 0);
 
 		// project -dont work
@@ -824,12 +824,12 @@ public class ApplicationServerQueryTest {
 	public void datasetsByAnyField() throws Exception {
 		// permID
 		String searchTerm = "20180424181745930-58";
-		List<DataSet> datasets = query.datasetsByAnyField(searchTerm);
+		List<DataSet> datasets = query.getDataSets().byAnyField(searchTerm);
 		assertTrue(datasets.size() > 0);
 
 		// type
 		searchTerm = "RAW_DATA";
-		datasets = query.datasetsByAnyField(searchTerm);
+		datasets = query.getDataSets().byAnyField(searchTerm);
 		assertTrue(datasets.size() > 0);
 
 		// Source type - dont work
@@ -864,7 +864,7 @@ public class ApplicationServerQueryTest {
 
 		// file type
 		searchTerm = "PROPRIETARY";
-		datasets = query.datasetsByAnyField(searchTerm);
+		datasets = query.getDataSets().byAnyField(searchTerm);
 		assertTrue(datasets.size() > 0);
 
 		// SEEK_DATAFILE_ID property

@@ -32,6 +32,44 @@ import org.json.simple.parser.ParseException;
  */
 public class OpenSeekEntry {
 
+	private static final String IS_TEST_KEY = "is_test";
+	
+	public static final String APPLICATION_SERVER_KEY = "as";
+	public static final String DATA_STORE_SERVER_KEY = "dss";
+	
+	public static final String SESSION_TOKEN = "sessionToken";
+	
+	private static final String ATTRIBUTE = "attribute";
+	private static final String PROPERTY = "property";
+	private static final String QUERY_TYPE = "queryType";
+	private static final String ATTRIBUTE_VALUE = "attributeValue";
+	
+	public static final String EXPERIMENT = "Experiment";
+	public static final String DATA_SET = "DataSet";
+	public static final String SAMPLE = "Sample";
+	
+	private static final String LIST_EXPERIMENT_TYPES = "experimenttypes";
+	private static final String LIST_DATASET_TYPES = "datasettypes";
+	private static final String LIST_SAMPLE_TYPES = "sampletypes";
+	
+	public static final String EXPERIMENT_TYPE = "ExperimentType";
+	public static final String DATA_SET_TYPE = "DataSetType";
+	public static final String SAMPLE_TYPE = "SampleType";
+	public static final String ENTITY_TYPE = "entityType";
+	
+	private static final String USERNAME = "username";
+	private static final String PASSWORD = "password";
+
+	private static final String FILE = "file";
+	private static final String DEST_KEY = "dest";
+	private static final String SOURCE_KEY = "source";
+
+	private static final String PERM_ID = "permID";
+	private static final String DOWNLOAD_TYPE = "downloadType";
+
+	private static final String ERROR_MESSAGE_END = "[/MESSAGE]";
+	private static final String ERROR_MESSAGE_BEGIN = "[MESSAGE]";
+
 	public static void main(String[] args) throws InvalidOptionException {
 		new OpenSeekEntry(args).execute();
 	}
@@ -80,7 +118,7 @@ public class OpenSeekEntry {
 				throw new InvalidOptionException("Unable to determine action");
 			}
 		} catch (Exception ex) {
-			System.out.println("[MESSAGE]"+ex.getMessage()+"[/MESSAGE]");
+			System.out.println(ERROR_MESSAGE_BEGIN+ex.getMessage()+ERROR_MESSAGE_END);
 			ex.printStackTrace();
 			exit(-1);
 		}
@@ -93,97 +131,90 @@ public class OpenSeekEntry {
 		JSONObject endpoints = options.getEndpoints();
 		JSONObject query = options.getQuery();
 
-		ApplicationServerQuery asQuery = new ApplicationServerQuery(endpoints.get("as").toString(),
-				endpoints.get("sessionToken").toString());
+		ApplicationServerQuery asQuery = new ApplicationServerQuery(endpoints.get(APPLICATION_SERVER_KEY).toString(),
+				endpoints.get(SESSION_TOKEN).toString());
 		List<? extends Object> result;
 
-		QueryType queryType = QueryType.valueOf(query.get("queryType").toString());
-
+		QueryType queryType = QueryType.valueOf(query.get(QUERY_TYPE).toString());
+		final Object query_entity_type = query.get(ENTITY_TYPE);
+		
 		switch (queryType) {
 		case ALL:
-			result = asQuery.allEntities(query.get("entityType").toString());
+			result = asQuery.allEntities(query_entity_type.toString());
 
-			if (query.get("entityType").equals("SampleType")) {
-				return mapToJsonString("sampletypes", result);
+			if (query_entity_type.equals(SAMPLE_TYPE)) {
+				return mapToJsonString(LIST_SAMPLE_TYPES, result);
 			}
-			if (query.get("entityType").equals("DataSetType")) {
-				return mapToJsonString("datasettypes", result);
+			if (query_entity_type.equals(DATA_SET_TYPE)) {
+				return mapToJsonString(LIST_DATASET_TYPES, result);
 			}
-			if (query.get("entityType").equals("ExperimentType")) {
-				return mapToJsonString("experimenttypes", result);
+			if (query_entity_type.equals(EXPERIMENT_TYPE)) {
+				return mapToJsonString(LIST_EXPERIMENT_TYPES, result);
 			}
 
 			break;
 		case PROPERTY:
-			result = asQuery.query(query.get("entityType").toString(), QueryType.PROPERTY,
-					query.get("property").toString(), query.get("propertyValue").toString());
+			result = asQuery.query(query_entity_type.toString(), QueryType.PROPERTY,
+					query.get(PROPERTY).toString(), query.get("propertyValue").toString());
 			break;
 		case ATTRIBUTE:
-			List<String> attributeValues = options.constructAttributeValues(query.get("attributeValue").toString());
-			result = asQuery.query(query.get("entityType").toString(), QueryType.ATTRIBUTE,
-					query.get("attribute").toString(), attributeValues);
+			List<String> attributeValues = options.constructAttributeValues(query.get(ATTRIBUTE_VALUE).toString());
+			result = asQuery.query(query_entity_type.toString(), QueryType.ATTRIBUTE,
+					query.get(ATTRIBUTE).toString(), attributeValues);
 
-			if (query.get("entityType").equals("SampleType")) {
-				return mapToJsonString("sampletypes", result);
+			if (query_entity_type.equals(SAMPLE_TYPE)) {
+				return mapToJsonString(LIST_SAMPLE_TYPES, result);
 			}
-			if (query.get("entityType").equals("DataSetType")) {
-				return mapToJsonString("datasettypes", result);
+			if (query_entity_type.equals(DATA_SET_TYPE)) {
+				return mapToJsonString(LIST_DATASET_TYPES, result);
 			}
-			if (query.get("entityType").equals("ExperimentType")) {
-				return mapToJsonString("experimenttypes", result);
+			if (query_entity_type.equals(EXPERIMENT_TYPE)) {
+				return mapToJsonString(LIST_EXPERIMENT_TYPES, result);
 			}
 
 			break;
 		case TYPE:
-			if (query.get("entityType").equals("Sample")) {
-				List<Sample> samples = asQuery.samplesByType(query);
+			if (query_entity_type.equals(SAMPLE)) {
+				List<Sample> samples = asQuery.getSamples().byType(query);
 				return new JSONCreator(samples).getJSON();
-			} else if (query.get("entityType").equals("DataSet")) {
-				List<DataSet> sets = asQuery.dataSetsByType(query);
+			} else if (query_entity_type.equals(DATA_SET)) {
+				List<DataSet> sets = asQuery.getDataSets().byType(query);
 				return new JSONCreator(sets).getJSON();
-			} else if (query.get("entityType").equals("Experiment")) {
-				List<Experiment> exps = asQuery.experimentsByType(query);
+			} else if (query_entity_type.equals(EXPERIMENT)) {
+				List<Experiment> exps = asQuery.getExperiments().byType(query);
 				return new JSONCreator(exps).getJSON();
 			} else {
-				throw new InvalidOptionException("Type query for unsupported type: " + query.get("entityType"));
+				throw new InvalidOptionException("Type query for unsupported type: " + query_entity_type);
 			}
 
 		case SEMANTIC:
-			if (query.get("entityType").equals("SampleType")) {
-				List<SampleType> types = asQuery.sampleTypesBySemantic(query);
-				return mapToJsonString("sampletypes", types);
+			if (query_entity_type.equals(SAMPLE_TYPE)) {
+				List<SampleType> types = asQuery.getSampleTypes().bySemantic(query);
+				return mapToJsonString(LIST_SAMPLE_TYPES, types);
 			} else {
-				throw new InvalidOptionException("Semantic query for unsupported type: " + query.get("entityType"));
+				throw new InvalidOptionException("Semantic query for unsupported type: " + query_entity_type);
 			}
 		default:
 			throw new InvalidOptionException("Unrecognized query type: " + queryType);
 
 		}
-		/*
-		 * if (query.get("queryType").toString().equals(QueryType.PROPERTY.toString()))
-		 * { result = asQuery.query(query.get("entityType").toString(),
-		 * QueryType.PROPERTY, query.get("property").toString(),
-		 * query.get("propertyValue").toString()); } else { List<String> attributeValues
-		 * = options.constructAttributeValues(query.get("attributeValue").toString());
-		 * result = asQuery.query(query.get("entityType").toString(),
-		 * QueryType.ATTRIBUTE, query.get("attribute").toString(), attributeValues); }
-		 */
+
 		return new JSONCreator(result).getJSON();
 	}
 
 	protected String doDataStoreQuery(OptionParser options) throws InvalidOptionException {
 		JSONObject endpoints = options.getEndpoints();
 		JSONObject query = options.getQuery();
-		DataStoreQuery dssQuery = new DataStoreQuery(endpoints.get("dss").toString(),
-				endpoints.get("sessionToken").toString());
+		DataStoreQuery dssQuery = new DataStoreQuery(endpoints.get(DATA_STORE_SERVER_KEY).toString(),
+				endpoints.get(SESSION_TOKEN).toString());
 		List<? extends Object> result;
-		if (query.get("queryType").toString().equals(QueryType.PROPERTY.toString())) {
-			result = dssQuery.query(query.get("entityType").toString(), QueryType.PROPERTY,
-					query.get("property").toString(), query.get("propertyValue").toString());
+		if (query.get(QUERY_TYPE).toString().equals(QueryType.PROPERTY.toString())) {
+			result = dssQuery.query(query.get(ENTITY_TYPE).toString(), QueryType.PROPERTY,
+					query.get(PROPERTY).toString(), query.get("propertyValue").toString());
 		} else {
-			List<String> attributeValues = options.constructAttributeValues(query.get("attributeValue").toString());
-			result = dssQuery.query(query.get("entityType").toString(), QueryType.ATTRIBUTE,
-					query.get("attribute").toString(), attributeValues);
+			List<String> attributeValues = options.constructAttributeValues(query.get(ATTRIBUTE_VALUE).toString());
+			result = dssQuery.query(query.get(ENTITY_TYPE).toString(), QueryType.ATTRIBUTE,
+					query.get(ATTRIBUTE).toString(), attributeValues);
 		}
 		return new JSONCreator(result).getJSON();
 	}
@@ -192,16 +223,16 @@ public class OpenSeekEntry {
 		JSONObject endpoints = options.getEndpoints();
 		JSONObject download = options.getDownload();
 
-		DataStoreDownload dssDownload = new DataStoreDownload(endpoints.get("dss").toString(),
-				endpoints.get("sessionToken").toString());
+		DataStoreDownload dssDownload = new DataStoreDownload(endpoints.get(DATA_STORE_SERVER_KEY).toString(),
+				endpoints.get(SESSION_TOKEN).toString());
 
-		String downloadType = download.get("downloadType").toString();
-		String permID = download.get("permID").toString();
-		String source = download.get("source").toString();
-		String dest = download.get("dest").toString();
+		String downloadType = download.get(DOWNLOAD_TYPE).toString();
+		String permID = download.get(PERM_ID).toString();
+		String source = download.get(SOURCE_KEY).toString();
+		String dest = download.get(DEST_KEY).toString();
 
 		String downloadInfo = "";
-		if (downloadType.equals("file")) {
+		if (downloadType.equals(FILE)) {
 			dssDownload.downloadSingleFile(permID, source, dest);
 			downloadInfo = downloadInfo + "Download file " + permID + "#" + source + " into " + dest;
 		} else if (downloadType.equals("folder")) {
@@ -221,17 +252,17 @@ public class OpenSeekEntry {
 		JSONObject account = options.getAccount();
 		JSONObject endpoints = options.getEndpoints();
 
-		Authentication au = new Authentication(endpoints.get("as").toString(), account.get("username").toString(),
-				account.get("password").toString());
+		Authentication au = new Authentication(endpoints.get(APPLICATION_SERVER_KEY).toString(), account.get(USERNAME).toString(),
+				account.get(PASSWORD).toString());
 		String sessionToken = au.sessionToken();
 		return ("{\"token\":" + "\"" + sessionToken + "\"" + "}");
 	}
 
 	private boolean checkIfInTest(OptionParser options) throws InvalidOptionException {
 		JSONObject endpoints = options.getEndpoints();
-		if (!endpoints.containsKey("is_test"))
+		if (!endpoints.containsKey(IS_TEST_KEY))
 			return false;
-		String is_test_txt = endpoints.get("is_test").toString();
+		String is_test_txt = endpoints.get(IS_TEST_KEY).toString();
 
 		try
 		{
@@ -243,39 +274,6 @@ public class OpenSeekEntry {
 		}
 		return is_test;
 	}
-
-	//
-	//
-	// try {
-	// JSONObject endpoints = options.getEndpoints();
-	// JSONObject query = options.getQuery();
-	//
-	// ApplicationServerQuery asQuery = new
-	// ApplicationServerQuery(endpoints.get("as").toString(),
-	// endpoints.get("sessionToken").toString());
-	// List result;
-	// if
-	// (query.get("queryType").toString().equals(QueryType.PROPERTY.toString()))
-	// {
-	// result = asQuery.query(query.get("entityType").toString(),
-	// QueryType.PROPERTY,
-	// query.get("property").toString(), query.get("propertyValue").toString());
-	// } else {
-	// List<String> attributeValues =
-	// options.constructAttributeValues(query.get("attributeValue").toString());
-	// result = asQuery.query(query.get("entityType").toString(),
-	// QueryType.ATTRIBUTE,
-	// query.get("attribute").toString(), attributeValues);
-	// }
-	// String jsonResult = new JSONCreator(result).getJSON();
-	// System.out.println(jsonResult);
-	// } catch (Exception ex) {
-	// System.err.println(ex.getMessage());
-	// ex.printStackTrace();
-	// System.exit(-1);
-	// }
-	// System.exit(0);
-	// }
 
 	protected void exit(int code) {
 		System.exit(code);

@@ -15,9 +15,7 @@ public class DataStoreStream {
 	protected static String sessionToken;
 
 	public static IDataStoreServerApi dss(String endpoint) {
-		//SslCertificateHelper.trustAnyCertificate(endpoint);
-		if (!OpenSeekEntry.is_test)
-		{
+		if (!OpenSeekEntry.is_test) {
 			SslCertificateHelper.addTrustedUrl(endpoint);
 		}
 		IDataStoreServerApi dss = HttpInvokerUtils.createStreamSupportingServiceStub(IDataStoreServerApi.class,
