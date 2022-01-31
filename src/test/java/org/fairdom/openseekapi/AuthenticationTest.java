@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.fairdom.openseekapi.general.Authentication;
 import org.fairdom.openseekapi.general.AuthenticationException;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.remoting.RemoteAccessException;
 

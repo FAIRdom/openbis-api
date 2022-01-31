@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fairdom.openseekapi.ApplicationServerQuery;
 import org.fairdom.openseekapi.facility.InvalidOptionException;
 import org.fairdom.openseekapi.facility.JSONCreator;
 import org.fairdom.openseekapi.facility.SslCertificateHelper;
@@ -102,9 +101,9 @@ public class ApplicationServerQueryTest {
                 assertTrue(JSONHelper.isValidJSON(json));
 		JSONObject jsonObj = JSONHelper.processJSON(json);
 		assertNotNull(jsonObj.get("spaces"));
-		JSONObject space = (JSONObject) ((JSONArray) jsonObj.get("spaces")).get(0);
+		//JSONObject space = (JSONObject) ((JSONArray) jsonObj.get("spaces")).get(0);
                 
-                /* Space should no longer contain experiments or sampels, too many entries and work
+                /* Space should no longer contain experiments or samples, too many entries and work
                 to fetch them. And not used anywhere
 		JSONArray experiments = (JSONArray) space.get("experiments");
 		JSONArray datasets = (JSONArray) space.get("datasets");
@@ -521,7 +520,7 @@ public class ApplicationServerQueryTest {
                                 "descriptorOntologyId","descriptorOntologyVersion","descriptorAccessionId"};
             
             for (String field : fields) {
-                HashMap wMap = new HashMap(qMap);
+                HashMap<String, String> wMap = new HashMap<String, String>(qMap);
                 wMap.put(field,"1");
                 
                 crit = new JSONObject(wMap);
@@ -559,7 +558,7 @@ public class ApplicationServerQueryTest {
                                 "descriptorOntologyId","descriptorOntologyVersion","descriptorAccessionId"};
             
             for (String field : fields) {
-                HashMap wMap = new HashMap(qMap);
+                HashMap<String, String> wMap = new HashMap<String, String>(qMap);
                 wMap.put(field,null);
                 
                 crit = new JSONObject(wMap);

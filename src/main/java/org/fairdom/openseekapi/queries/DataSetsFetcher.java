@@ -80,7 +80,7 @@ public class DataSetsFetcher{
 	
 	public List<DataSet> byProperty(String property, String propertyValue) {
 		DataSetSearchCriteria criterion = new DataSetSearchCriteria();
-		criterion.withProperty(property).thatContains(propertyValue);
+		criterion.withStringProperty(property).thatContains(propertyValue);
 
 		DataSetFetchOptions options = dataSetFetchOptions();
 
@@ -92,8 +92,6 @@ public class DataSetsFetcher{
 		return as.searchDataSets(sessionToken, criteria, fetchOptions).getObjects();
 	}
 
-	
-	@SuppressWarnings("unchecked")
 	public List<DataSet> byType(JSONObject query) throws InvalidOptionException {
 
 		if (!query.containsKey(TYPE_CODE) && !query.containsKey(TYPE_CODES))

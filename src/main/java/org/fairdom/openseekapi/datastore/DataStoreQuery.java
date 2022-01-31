@@ -48,7 +48,7 @@ public class DataStoreQuery extends DataStoreStream {
 
 	public List<DataSetFile> datasetFilesByProperty(String property, String propertyValue) {
 		DataSetFileSearchCriteria criteria = new DataSetFileSearchCriteria();
-		criteria.withDataSet().withProperty(property).thatContains(propertyValue);
+		criteria.withDataSet().withStringProperty(property).thatContains(propertyValue);
 
 		SearchResult<DataSetFile> result = dss.searchFiles(sessionToken, criteria, new DataSetFileFetchOptions());
 		List<DataSetFile> searchFiles = result.getObjects();

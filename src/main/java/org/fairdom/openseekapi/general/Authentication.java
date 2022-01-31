@@ -1,6 +1,5 @@
 package org.fairdom.openseekapi.general;
 
-import org.fairdom.openseekapi.OpenSeekEntry;
 import org.fairdom.openseekapi.facility.SslCertificateHelper;
 
 import ch.ethz.sis.openbis.generic.asapi.v3.IApplicationServerApi;

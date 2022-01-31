@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.fairdom.openseekapi.OpenSeekEntry;
-import org.fairdom.openseekapi.OptionParser;
 import org.fairdom.openseekapi.facility.InvalidOptionException;
 import org.fairdom.openseekapi.facility.SslCertificateHelper;
 import org.fairdom.openseekapi.general.Authentication;

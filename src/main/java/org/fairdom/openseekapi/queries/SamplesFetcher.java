@@ -8,9 +8,6 @@ import org.fairdom.openseekapi.facility.InvalidOptionException;
 import org.json.simple.JSONObject;
 
 import ch.ethz.sis.openbis.generic.asapi.v3.IApplicationServerApi;
-import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.DataSet;
-import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.fetchoptions.DataSetFetchOptions;
-import ch.ethz.sis.openbis.generic.asapi.v3.dto.dataset.search.DataSetSearchCriteria;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.sample.Sample;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.sample.fetchoptions.SampleFetchOptions;
 import ch.ethz.sis.openbis.generic.asapi.v3.dto.sample.search.SampleSearchCriteria;
@@ -78,14 +75,13 @@ public class SamplesFetcher{
 
 	public List<Sample> byProperty(String property, String propertyValue) {
 		SampleSearchCriteria criterion = new SampleSearchCriteria();
-		criterion.withProperty(property).thatContains(propertyValue);
+		criterion.withStringProperty(property).thatContains(propertyValue);
 
 		SampleFetchOptions options = sampleFetchOptions();
 
 		return as.searchSamples(sessionToken, criterion, options).getObjects();
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Sample> byType(JSONObject query) throws InvalidOptionException {
 
 		if (!query.containsKey(TYPE_CODE) && !query.containsKey(TYPE_CODES))
