@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.fairdom.openseekapi.OpenSeekEntry;
-import org.fairdom.openseekapi.OptionParser;
+import org.fairdom.openseekapi.facility.InvalidOptionException;
 import org.fairdom.openseekapi.facility.SslCertificateHelper;
 import org.fairdom.openseekapi.general.Authentication;
 import org.fairdom.openseekapi.general.AuthenticationException;
@@ -84,7 +83,7 @@ public class OpenSeekEntryTest {
         @Test
         public void dataSetEntityHasRichDetails() throws Exception {
 		String token = getToken();
-		String endpoints = "{\"as\":\"" + as_endpoint + "\",\"sessionToken\":\"" + token + "\"}";
+		String endpoints = "{\"as\":\"" + as_endpoint + "\",\"sessionToken\":\"" + token + "\",\"is_test\":\"true\"}";
                 String id = "20180424182903704-59";
 		String query = "{\"entityType\":\"DataSet\", \"queryType\":\"ATTRIBUTE\", \"attribute\":\"permID\", \"attributeValue\":\""+id+"\"}";
 		//String query = "{\"entityType\":\"DataSet\", \"queryType\":\"ATTRIBUTE\", \"attribute\":\"permID\", \"attributeValue\":\"20171002172401546-38\"}";
@@ -785,7 +784,7 @@ public class OpenSeekEntryTest {
 		assertTrue(tempFile.length() > 0);
 	}
 
-	private JSONObject doExecute(String[] args) throws ParseException {
+	private JSONObject doExecute(String[] args) throws ParseException, InvalidOptionException {
 		OpenSeekEntryWrapper wrapper = new OpenSeekEntryWrapper(args);
 		redirectSysOut();
 		wrapper.execute();

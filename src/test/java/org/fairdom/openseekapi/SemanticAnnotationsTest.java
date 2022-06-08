@@ -39,6 +39,7 @@ public class SemanticAnnotationsTest {
     
     @Before
     public void setUp() throws AuthenticationException, IOException {
+    	OpenSeekEntry.is_test = true;
     
         Authentication au = new Authentication(Commons.TEST_OPENBIS_URL, Commons.TEST_OPENBIS_USER, Commons.TEST_OPENBIS_PASSWORD);
         sessionToken = au.sessionToken();

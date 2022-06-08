@@ -14,7 +14,7 @@ public class Authentication {
 	private String password;
 
 	private String username;
-
+	
 	public Authentication(String startAsEndpoint, String startUsername, String startPassword) {
 		asEndpoint = startAsEndpoint;
 		username = startUsername;
@@ -23,8 +23,8 @@ public class Authentication {
 
 	public IApplicationServerApi as() {
 		String AS_URL = asEndpoint;
-		//SslCertificateHelper.trustAnyCertificate(AS_URL);                
-                SslCertificateHelper.addTrustedUrl(AS_URL);
+		SslCertificateHelper.addTrustedUrl(AS_URL);
+
 		IApplicationServerApi as = HttpInvokerUtils.createServiceStub(IApplicationServerApi.class,
 				AS_URL + IApplicationServerApi.SERVICE_URL, 500000);
 

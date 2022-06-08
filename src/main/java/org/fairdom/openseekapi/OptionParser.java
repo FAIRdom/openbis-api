@@ -16,33 +16,41 @@ import org.json.simple.parser.ParseException;
  * 
  *         Argument structure with example value
  *         -account:{"username":"test","password":"test"}
- *         -endpoints:{"as":"http://as.example.com","dss":"http://dss.example.com","sessionToken":"somevalue"}
- *         -query:{"entityType":"Experiment","queryType":"PROPERTY","property":"SEEK_STUDY_ID","propertyValue":"Study_1"}
+ *         -endpoints:{"as":"http://as.example.com","dss":"http://dss.example.com","sessionToken":"somevalue","is_test":"false"}
+2 *         -query:{"entityType":"Experiment","queryType":"PROPERTY","property":"SEEK_STUDY_ID","propertyValue":"Study_1"}
  *         -download:{"type":"file","permID":"ID100","source":"original/file","dest":"/home/test/file"}
  */
 public class OptionParser {
 	private JSONObject account = null;
+	private static final String SUFFIX_ACCOUNT = "-account";
+	
 	private JSONObject download = null;
+	private static final String SUFFIX_DOWNLOAD = "-download";
+	
 	private JSONObject endpoints = null;
+	private static final String SUFFIX_ENDPOINTS = "-endpoints";
+	
 	private JSONObject query = null;
+	private static final String SUFFIX_QUERY = "-query";
+	
 	private Action action = null;
 
 	public OptionParser(String[] args) throws InvalidOptionException, ParseException {
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			if (arg.equals("-account")) {
+			if (arg.equals(SUFFIX_ACCOUNT)) {
 				i++;
 				handleEmptyOptionValue(arg, args[i]);
 				setAccount(args[i]);
-			} else if (arg.equals("-endpoints")) {
+			} else if (arg.equals(SUFFIX_ENDPOINTS)) {
 				i++;
 				handleEmptyOptionValue(arg, args[i]);
 				setEndpoints(args[i]);
-			} else if (arg.equals("-query")) {
+			} else if (arg.equals(SUFFIX_QUERY)) {
 				i++;
 				handleEmptyOptionValue(arg, args[i]);
 				setQuery(args[i]);
-			} else if (arg.equals("-download")) {
+			} else if (arg.equals(SUFFIX_DOWNLOAD)) {
 				i++;
 				handleEmptyOptionValue(arg, args[i]);
 				setDownload(args[i]);
@@ -126,9 +134,9 @@ public class OptionParser {
 		} else if (getDownload() != null) {
 			action = Action.DOWNLOAD;
 		} else if (getEndpoints() != null && getQuery() != null) {
-			if (getEndpoints().get("dss") != null) {
+			if (getEndpoints().get(OpenSeekEntry.DATA_STORE_SERVER_KEY) != null) {
 				action = Action.DS_QUERY;
-			} else if (getEndpoints().get("as") != null) {
+			} else if (getEndpoints().get(OpenSeekEntry.APPLICATION_SERVER_KEY) != null) {
 				action = Action.AS_QUERY;
 			}
 		}

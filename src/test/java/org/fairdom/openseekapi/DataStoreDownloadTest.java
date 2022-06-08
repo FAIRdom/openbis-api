@@ -37,6 +37,8 @@ public class DataStoreDownloadTest {
 
 	@Before
 	public void setUp() throws AuthenticationException, IOException {
+		OpenSeekEntry.is_test = true;
+		
 		/*Authentication au = new Authentication("https://openbis-api.fair-dom.org/openbis/openbis", "apiuser",
 				"apiuser");
 		endpoint = "https://openbis-api.fair-dom.org/datastore_server";

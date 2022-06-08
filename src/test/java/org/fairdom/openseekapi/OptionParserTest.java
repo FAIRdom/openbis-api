@@ -6,7 +6,6 @@ package org.fairdom.openseekapi;
  */
 import static org.junit.Assert.assertEquals;
 
-import org.fairdom.openseekapi.OptionParser;
 import org.fairdom.openseekapi.facility.InvalidOptionException;
 import org.fairdom.openseekapi.general.Action;
 import org.json.simple.JSONObject;

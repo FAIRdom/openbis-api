@@ -18,6 +18,9 @@ import ch.ethz.sis.openbis.generic.dssapi.v3.dto.datasetfile.search.DataSetFileS
  */
 public class DataStoreQuery extends DataStoreStream {
 
+	private static final String DATA_SET_PERM_ID = "DataSetPermID";
+	private static final String DATA_SET_FILE = "DataSetFile";
+
 	public DataStoreQuery(String startEndpoint, String startSessionToken) {
 		super(startEndpoint, startSessionToken);
 	}
@@ -45,7 +48,7 @@ public class DataStoreQuery extends DataStoreStream {
 
 	public List<DataSetFile> datasetFilesByProperty(String property, String propertyValue) {
 		DataSetFileSearchCriteria criteria = new DataSetFileSearchCriteria();
-		criteria.withDataSet().withProperty(property).thatContains(propertyValue);
+		criteria.withDataSet().withStringProperty(property).thatContains(propertyValue);
 
 		SearchResult<DataSetFile> result = dss.searchFiles(sessionToken, criteria, new DataSetFileFetchOptions());
 		List<DataSetFile> searchFiles = result.getObjects();
@@ -56,8 +59,8 @@ public class DataStoreQuery extends DataStoreStream {
 			throws InvalidOptionException {
 		List<? extends Object> result = null;
 		if (queryType == QueryType.ATTRIBUTE) {
-			if (type.equals("DataSetFile")) {
-				if (!key.equalsIgnoreCase("DataSetPermID")) {
+			if (type.equals(DATA_SET_FILE)) {
+				if (!key.equalsIgnoreCase(DATA_SET_PERM_ID)) {
 					throw new InvalidOptionException("Only dataSetPermId is currently supported");
 				}
 				result = datasetFilesByDataSetPermIds(values);
@@ -75,7 +78,7 @@ public class DataStoreQuery extends DataStoreStream {
 			throws InvalidOptionException {
 		List<? extends Object> result = null;
 		if (queryType == QueryType.PROPERTY) {
-			if (type.equals("DataSetFile")) {
+			if (type.equals(DATA_SET_FILE)) {
 				result = datasetFilesByProperty(key, value);
 			} else {
 				throw new InvalidOptionException("Unrecognised type: " + type);

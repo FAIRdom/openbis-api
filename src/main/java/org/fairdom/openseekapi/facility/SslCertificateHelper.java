@@ -15,6 +15,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.fairdom.openseekapi.OpenSeekEntry;
+
 import ch.systemsx.cisd.base.exceptions.CheckedExceptionTunnel;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -125,33 +127,36 @@ public class SslCertificateHelper
         }
     }
 
-    public static void addTrustedUrl(String url) {
-        addTrustedUrl(url, false);
+    public static void addTrustedUrl(String url) {    	
+   		addTrustedUrl(url, false);	
     }
     
     public static void addTrustedUrl(String url, boolean renew)
     {
-        if (!url.startsWith("https://")) throw new IllegalArgumentException("URL must starts with https:// not: "+url);;
-        
-        if (trusted.containsKey(url) && !renew) return;
-        
-        try
-        {
-            Certificate[] certificates = getServerCertificate(url);
+    	if (!OpenSeekEntry.is_test)
+    	{
+    		if (!url.startsWith("https://")) throw new IllegalArgumentException("URL must starts with https:// ( URL provided: "+url+")");
 
-            KeyStore keyStore = loadKeyStore();
+    		if (trusted.containsKey(url) && !renew) return;
 
-            addCertificates(keyStore,url,certificates);
+    		try
+    		{
+    			Certificate[] certificates = getServerCertificate(url);
 
-            saveKeyStore(keyStore);
+    			KeyStore keyStore = loadKeyStore();
 
-            trusted.put(url, true);
-        
-            
-        } catch (Exception ex)
-        {
-            throw CheckedExceptionTunnel.wrapIfNecessary(ex);
-        }
+    			addCertificates(keyStore,url,certificates);
+
+    			saveKeyStore(keyStore);
+
+    			trusted.put(url, true);
+
+
+    		} catch (Exception ex)
+    		{
+    			throw CheckedExceptionTunnel.wrapIfNecessary(ex);
+    		}
+    	}
     }
 
     static KeyStore loadKeyStore() throws IOException, GeneralSecurityException {
